@@ -1,12 +1,24 @@
-# This "Book" type defines the queryable fields for every book in our data source.
-type Book {
+type Character {
+  name: String
   title: String
-  author: String
+  vision: Element
 }
 
-# The "Query" type is special: it lists all of the available queries that 
-# clients can execute, along with the return type for each. In this
-# case, the "books" query returns an array of zero or more Books (defined above).
+type Element {
+  name: String
+  key: String
+  reactions: [Reaction]
+}
+
+type Reaction {
+  name: String
+  elements: [Element]
+  description: String
+}
+
 type Query {
-  books: [Book]
+  characters: [Character]
+  character(name: String!): Character
+  elements: [Element]
+  element(name: String!): Element
 }

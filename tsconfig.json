@@ -7,9 +7,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "typeRoots": [
-      "./types"
-    ],
     "paths": {
       "@/*": ["./src/*"]
     }
