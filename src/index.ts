@@ -1,10 +1,10 @@
 import { readFileSync } from 'fs'
 import { ApolloServer } from '@apollo/server'
 import { startStandaloneServer } from '@apollo/server/standalone'
-import { Api } from './api/api.js';
-import { CharacterModel } from './models/CharacterModel.js';
-import { ElementModel } from './models/ElementModel.js';
-import getDepth from './utils/getDepth.js';
+import { Api } from './api/api';
+import { CharacterModel } from './models/CharacterModel';
+import { ElementModel } from './models/ElementModel';
+import getDepth from './utils/getDepth';
 
 const typeDefs = readFileSync(new URL('schema.graphql', import.meta.url), { encoding: 'utf-8' })
 
