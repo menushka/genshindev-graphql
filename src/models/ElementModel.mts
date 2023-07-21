@@ -1,4 +1,4 @@
-import type { ApiType } from '@/api/api';
+import type { ApiType } from '../api/api.mjs';
 
 export interface Element {
   name: string

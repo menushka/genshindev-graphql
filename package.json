@@ -3,23 +3,29 @@
   "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
   "scripts": {
-    "build": "rimraf dist && webpack",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node-esm' --files src/index.ts",
-    "start": "node dist/bundle.cjs"
+    "copy": "copyfiles src/*.graphql .build/",
+    "start": "pnpm copy && serverless offline",
+    "deploy": "serverless deploy"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.7.5",
+    "@as-integrations/aws-lambda": "^2.0.1",
     "graphql": "^16.7.1"
   },
   "devDependencies": {
+    "@tsconfig/node16": "^16.1.0",
     "@types/node": "^20.4.2",
     "copyfiles": "^2.4.1",
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.1",
+    "serverless": "^3.33.0",
+    "serverless-bundle": "^6.0.0",
+    "serverless-offline": "^12.0.4",
+    "serverless-plugin-typescript": "^2.1.5",
+    "serverless-webpack": "^5.11.0",
     "source-map-loader": "^4.0.1",
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",

@@ -1,5 +1,5 @@
-import type { ApiType } from '@/api/api';
-import type { ElementModel } from './ElementModel';
+import type { ApiType } from '../api/api.mjs';
+import type { ElementModel } from './ElementModel.mjs';
 
 export interface Character {
   name: string

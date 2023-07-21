@@ -1,0 +1,20 @@
+service: genshindev-graphql
+package:
+  individually: true
+provider:
+  name: aws
+  runtime: nodejs18.x
+  httpApi:
+    cors: true
+functions:
+  graphql:
+    handler: src/lambda.graphqlHandler
+    events:
+      - httpApi:
+          path: /
+          method: POST
+      - httpApi:
+          path: /
+          method: GET
+plugins:
+  - serverless-plugin-typescript

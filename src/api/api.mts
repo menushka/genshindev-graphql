@@ -1,5 +1,5 @@
-import type { Character } from '@/models/CharacterModel'
-import type { Element } from '@/models/ElementModel'
+import type { Character } from '../models/CharacterModel.mjs'
+import type { Element } from '../models/ElementModel.mjs'
 
 const Api = {
   Characters: {
