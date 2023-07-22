@@ -1,5 +1,7 @@
 import { readFileSync } from 'fs'
 import { ApolloServer } from '@apollo/server'
+import { ApolloServerPluginLandingPageLocalDefault, ApolloServerPluginLandingPageProductionDefault } from '@apollo/server/plugin/landingPage/default';
+
 import { Api } from './api/api';
 import { CharacterModel } from './models/CharacterModel';
 import { ElementModel } from './models/ElementModel';
@@ -39,7 +41,12 @@ export type Context = Awaited<ReturnType<typeof context>>
 const server = new ApolloServer<Context>({
   typeDefs,
   resolvers,
-  introspection: true
+  introspection: true,
+  plugins: [
+    process.env.NODE_ENV === 'production'
+      ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
+  ]
 })
 
 export { context, server }
