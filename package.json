@@ -1,25 +1,31 @@
 {
   "name": "genshindev-graphql",
-  "type": "module",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "build": "rimraf dist && webpack",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node-esm' --files src/index.ts",
-    "start": "node dist/bundle.cjs"
+    "start": "serverless offline",
+    "package": "serverless package",
+    "deploy": "serverless deploy"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@apollo/server": "^4.7.5",
-    "graphql": "^16.7.1"
+    "@as-integrations/aws-lambda": "^2.0.1",
+    "graphql": "^16.7.1",
+    "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
+    "@tsconfig/node16": "^16.1.0",
     "@types/node": "^20.4.2",
     "copyfiles": "^2.4.1",
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.1",
+    "serverless": "^3.33.0",
+    "serverless-bundle": "^6.0.0",
+    "serverless-offline": "^12.0.4",
+    "serverless-webpack": "^5.11.0",
     "source-map-loader": "^4.0.1",
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
@@ -28,5 +34,10 @@
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-node-externals": "^3.0.0"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": ["react", "react-dom"]
+    }
   }
 }

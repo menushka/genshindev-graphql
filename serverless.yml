@@ -1,0 +1,19 @@
+service: genshindev-graphql
+provider:
+  name: aws
+  runtime: nodejs18.x
+  httpApi:
+    cors: true
+functions:
+  graphql:
+    handler: src/index.handler
+    events:
+      - httpApi:
+          path: /
+          method: POST
+      - httpApi:
+          path: /
+          method: GET
+plugins:
+  - serverless-webpack
+  - serverless-offline

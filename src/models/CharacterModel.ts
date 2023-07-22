@@ -1,4 +1,4 @@
-import type { ApiType } from '@/api/api';
+import type { ApiType } from '../api/api';
 import type { ElementModel } from './ElementModel';
 
 export interface Character {
