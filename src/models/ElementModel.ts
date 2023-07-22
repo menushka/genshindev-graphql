@@ -1,21 +1,19 @@
+import { Element, Reaction } from '../__generated__/resolvers-types';
 import type { ApiType } from '../api/api';
 
-export interface Element {
-  name: string
-  reactions: Reaction[]
+export interface ReactionRaw extends Omit<Reaction, 'elements'> {
+  elements: string[]
 }
 
-export interface Reaction {
-  name: string
-  elements: string[]
-  description: string
+export interface ElementRaw extends Omit<Element, 'reactions'> {
+  reactions: ReactionRaw[]
 }
 
 export class ElementModel {
   private api: ApiType
 
-  elements: Element[] = []
-  elementsByName: { [name: string]: Element } = {}
+  elements: ElementRaw[] = []
+  elementsByName: { [name: string]: ElementRaw } = {}
 
   constructor(api: ApiType) {
     this.api = api
@@ -27,8 +25,8 @@ export class ElementModel {
     this.elementsByName = Object.fromEntries(this.elements.map(element => [element.name, element]))
   }
 
-  getAll() {
-    return this.elements
+  getAll(depth = 1) {
+    return this.elements.map(mapToResponse(this, depth))
   }
 
   getByName(name: string, depth = 1) {
@@ -37,7 +35,7 @@ export class ElementModel {
 }
 
 const mapToResponse = (elementModel: ElementModel, depth: number) =>
-  ({ name, reactions }: Element) => ({
+  ({ name, reactions }: ElementRaw): Element => ({
     name,
     reactions: reactions.map(({ name, elements, description }) => {
       const result = { name, elements, description }
@@ -47,10 +45,7 @@ const mapToResponse = (elementModel: ElementModel, depth: number) =>
           elements: elements.map(element => elementModel.getByName(element, depth - 1)),
         }
       } else {
-        return {
-          ...result,
-          elements
-        }
+        return { name, description }
       }
     })
   })

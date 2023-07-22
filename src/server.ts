@@ -1,44 +1,20 @@
 import { readFileSync } from 'fs'
-import path from 'path';
 import { ApolloServer } from '@apollo/server'
-import { gql } from "graphql-tag"
 import { Api } from './api/api';
 import { CharacterModel } from './models/CharacterModel';
 import { ElementModel } from './models/ElementModel';
 import getDepth from './utils/getDepth';
+import { Resolvers } from './__generated__/resolvers-types'
+import typeDefs from './schema.graphql'
 
-const typeDefs = gql`
-  type Character {
-    name: String
-    title: String
-    vision: Element
-  }
-
-  type Element {
-    name: String
-    key: String
-    reactions: [Reaction]
-  }
-
-  type Reaction {
-    name: String
-    elements: [Element]
-    description: String
-  }
-
-  type Query {
-    characters: [Character]
-    character(name: String!): Character
-    elements: [Element]
-    element(name: String!): Element
-  }
-`
-
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
     characters: (parent, args, contextValue, info) => contextValue.characterModel.getAll(),
     character: (parent, { name }, contextValue, info) => contextValue.characterModel.getByName(name),
-    elements: (parent, args, contextValue, info) => contextValue.elementModel.getAll(),
+    elements: (parent, args, contextValue, info) => {
+      const depth = Math.floor((getDepth(info.operation.selectionSet) - 2) / 2)
+      return contextValue.elementModel.getAll(depth)
+    },
     element: (parent, { name }, contextValue, info) => {
       const depth = Math.floor((getDepth(info.operation.selectionSet) - 2) / 2)
       return contextValue.elementModel.getByName(name, depth)
@@ -58,9 +34,9 @@ const context = async () => {
     elementModel,
   }
 }
-type ContextType = Awaited<ReturnType<typeof context>>
+export type Context = Awaited<ReturnType<typeof context>>
 
-const server = new ApolloServer<ContextType>({
+const server = new ApolloServer<Context>({
   typeDefs,
   resolvers,
   introspection: true

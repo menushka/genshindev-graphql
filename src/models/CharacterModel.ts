@@ -1,9 +1,8 @@
+import { Character } from '../__generated__/resolvers-types';
 import type { ApiType } from '../api/api';
 import type { ElementModel } from './ElementModel';
 
-export interface Character {
-  name: string
-  title: string
+export interface CharacterRaw extends Omit<Character, 'vision'> {
   vision: string
 }
 
@@ -11,7 +10,7 @@ export class CharacterModel {
   private api: ApiType
   private elementModel: ElementModel
   
-  characters: Character[] = []
+  characters: CharacterRaw[] = []
 
   constructor(api: ApiType, elementModel: ElementModel) {
     this.api = api
@@ -33,7 +32,7 @@ export class CharacterModel {
 }
 
 const mapToResponse = (elementModel: ElementModel) =>
-  ({ name, title, vision }: Character) => ({
+  ({ name, title, vision }: CharacterRaw): Character => ({
     name,
     title,
     vision: elementModel.getByName(vision)

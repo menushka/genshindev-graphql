@@ -6,7 +6,8 @@
   "scripts": {
     "start": "serverless offline",
     "package": "serverless package",
-    "deploy": "serverless deploy"
+    "deploy": "serverless deploy",
+    "codegen": "graphql-codegen --config codegen.yml"
   },
   "author": "",
   "license": "ISC",
@@ -17,8 +18,13 @@
     "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "4.0.1",
+    "@graphql-codegen/introspection": "4.0.0",
+    "@graphql-codegen/typescript": "4.0.1",
+    "@graphql-codegen/typescript-resolvers": "4.0.1",
     "@tsconfig/node16": "^16.1.0",
     "@types/node": "^20.4.2",
+    "copy-webpack-plugin": "^11.0.0",
     "copyfiles": "^2.4.1",
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.1",
@@ -37,7 +43,10 @@
   },
   "pnpm": {
     "peerDependencyRules": {
-      "ignoreMissing": ["react", "react-dom"]
+      "ignoreMissing": [
+        "react",
+        "react-dom"
+      ]
     }
   }
 }
