@@ -17,6 +17,14 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Artifact = {
+  __typename?: 'Artifact';
+  fourPieceBonus?: Maybe<Scalars['String']['output']>;
+  maxRarity?: Maybe<Scalars['Int']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  twoPieceBonus?: Maybe<Scalars['String']['output']>;
+};
+
 export type Character = {
   __typename?: 'Character';
   name?: Maybe<Scalars['String']['output']>;
@@ -33,10 +41,19 @@ export type Element = {
 
 export type Query = {
   __typename?: 'Query';
+  artifact?: Maybe<Artifact>;
+  artifacts?: Maybe<Array<Maybe<Artifact>>>;
   character?: Maybe<Character>;
   characters?: Maybe<Array<Maybe<Character>>>;
   element?: Maybe<Element>;
   elements?: Maybe<Array<Maybe<Element>>>;
+  weapon?: Maybe<Weapon>;
+  weapons?: Maybe<Array<Maybe<Weapon>>>;
+};
+
+
+export type QueryArtifactArgs = {
+  name: Scalars['String']['input'];
 };
 
 
@@ -49,11 +66,29 @@ export type QueryElementArgs = {
   name: Scalars['String']['input'];
 };
 
+
+export type QueryWeaponArgs = {
+  name: Scalars['String']['input'];
+};
+
 export type Reaction = {
   __typename?: 'Reaction';
   description?: Maybe<Scalars['String']['output']>;
   elements?: Maybe<Array<Maybe<Element>>>;
   name?: Maybe<Scalars['String']['output']>;
+};
+
+export type Weapon = {
+  __typename?: 'Weapon';
+  ascensionMaterial?: Maybe<Scalars['String']['output']>;
+  baseAttack?: Maybe<Scalars['Int']['output']>;
+  location?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  passiveDesc?: Maybe<Scalars['String']['output']>;
+  passiveName?: Maybe<Scalars['String']['output']>;
+  rarity?: Maybe<Scalars['Int']['output']>;
+  subStat?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
@@ -128,22 +163,36 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Artifact: ResolverTypeWrapper<Artifact>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   Character: ResolverTypeWrapper<Character>;
   Element: ResolverTypeWrapper<Element>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Query: ResolverTypeWrapper<{}>;
   Reaction: ResolverTypeWrapper<Reaction>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Weapon: ResolverTypeWrapper<Weapon>;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Artifact: Artifact;
   Boolean: Scalars['Boolean']['output'];
   Character: Character;
   Element: Element;
+  Int: Scalars['Int']['output'];
   Query: {};
   Reaction: Reaction;
   String: Scalars['String']['output'];
+  Weapon: Weapon;
+}>;
+
+export type ArtifactResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Artifact'] = ResolversParentTypes['Artifact']> = ResolversObject<{
+  fourPieceBonus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  maxRarity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  twoPieceBonus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type CharacterResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Character'] = ResolversParentTypes['Character']> = ResolversObject<{
@@ -161,10 +210,14 @@ export type ElementResolvers<ContextType = Context, ParentType extends Resolvers
 }>;
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  artifact?: Resolver<Maybe<ResolversTypes['Artifact']>, ParentType, ContextType, RequireFields<QueryArtifactArgs, 'name'>>;
+  artifacts?: Resolver<Maybe<Array<Maybe<ResolversTypes['Artifact']>>>, ParentType, ContextType>;
   character?: Resolver<Maybe<ResolversTypes['Character']>, ParentType, ContextType, RequireFields<QueryCharacterArgs, 'name'>>;
   characters?: Resolver<Maybe<Array<Maybe<ResolversTypes['Character']>>>, ParentType, ContextType>;
   element?: Resolver<Maybe<ResolversTypes['Element']>, ParentType, ContextType, RequireFields<QueryElementArgs, 'name'>>;
   elements?: Resolver<Maybe<Array<Maybe<ResolversTypes['Element']>>>, ParentType, ContextType>;
+  weapon?: Resolver<Maybe<ResolversTypes['Weapon']>, ParentType, ContextType, RequireFields<QueryWeaponArgs, 'name'>>;
+  weapons?: Resolver<Maybe<Array<Maybe<ResolversTypes['Weapon']>>>, ParentType, ContextType>;
 }>;
 
 export type ReactionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Reaction'] = ResolversParentTypes['Reaction']> = ResolversObject<{
@@ -174,10 +227,25 @@ export type ReactionResolvers<ContextType = Context, ParentType extends Resolver
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type WeaponResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Weapon'] = ResolversParentTypes['Weapon']> = ResolversObject<{
+  ascensionMaterial?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  baseAttack?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  location?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  passiveDesc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  passiveName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  rarity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  subStat?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type Resolvers<ContextType = Context> = ResolversObject<{
+  Artifact?: ArtifactResolvers<ContextType>;
   Character?: CharacterResolvers<ContextType>;
   Element?: ElementResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Reaction?: ReactionResolvers<ContextType>;
+  Weapon?: WeaponResolvers<ContextType>;
 }>;
 

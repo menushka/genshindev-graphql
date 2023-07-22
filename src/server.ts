@@ -8,6 +8,8 @@ import { ElementModel } from './models/ElementModel';
 import getDepth from './utils/getDepth';
 import { Resolvers } from './__generated__/resolvers-types'
 import typeDefs from './schema.graphql'
+import { WeaponModel } from './models/WeaponModel';
+import { ArtifactModel } from './models/ArtifactModel';
 
 const resolvers: Resolvers = {
   Query: {
@@ -21,19 +23,31 @@ const resolvers: Resolvers = {
       const depth = Math.floor((getDepth(info.operation.selectionSet) - 2) / 2)
       return contextValue.elementModel.getByName(name, depth)
     },
+    weapons: (parent, args, contextValue, info) => contextValue.weaponModel.getAll(),
+    weapon: (parent, { name }, contextValue, info) => contextValue.weaponModel.getByName(name),
+    artifacts: (parent, args, contextValue, info) => contextValue.artifactModel.getAll(),
+    artifact: (parent, { name }, contextValue, info) => contextValue.artifactModel.getByName(name),
   }
 }
 
 const context = async () => {
   const elementModel = new ElementModel(Api)
-  elementModel.refresh()
+  await elementModel.refresh()
 
   const characterModel = new CharacterModel(Api, elementModel)
-  characterModel.refresh()
+  await characterModel.refresh()
+
+  const weaponModel = new WeaponModel(Api)
+  await weaponModel.refresh()
+
+  const artifactModel = new ArtifactModel(Api)
+  await artifactModel.refresh()
 
   return {
     characterModel,
     elementModel,
+    weaponModel,
+    artifactModel,
   }
 }
 export type Context = Awaited<ReturnType<typeof context>>
@@ -42,7 +56,7 @@ const server = new ApolloServer<Context>({
   typeDefs,
   resolvers,
   introspection: true,
-  plugins: process.env.NODE_ENV === 'production' ? [ApolloServerPluginLandingPageGraphQLPlayground()] : [ApolloServerPluginLandingPageLocalDefault()],
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 })
 
 export { context, server }

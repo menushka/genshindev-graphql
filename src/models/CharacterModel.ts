@@ -11,6 +11,7 @@ export class CharacterModel {
   private elementModel: ElementModel
   
   characters: CharacterRaw[] = []
+  charactersByName: { [name: string]: CharacterRaw } = {}
 
   constructor(api: ApiType, elementModel: ElementModel) {
     this.api = api
@@ -20,6 +21,7 @@ export class CharacterModel {
   async refresh() {
     const characterNames = await this.api.Characters.All()
     this.characters = await Promise.all(characterNames.map(this.api.Characters.Specific))
+    this.charactersByName = Object.fromEntries(this.characters.map(artifact => [artifact.name, artifact]))
   }
 
   getAll() {
@@ -27,7 +29,7 @@ export class CharacterModel {
   }
 
   getByName(name: string) {
-    return mapToResponse(this.elementModel)(this.characters.find(character => character.name === name))
+    return mapToResponse(this.elementModel)(this.charactersByName[name])
   }
 }
 

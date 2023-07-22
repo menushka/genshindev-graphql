@@ -16,9 +16,32 @@ type Reaction {
   description: String
 }
 
+type Weapon {
+  name: String
+  type: String
+  rarity: Int
+  baseAttack: Int
+  subStat: String
+  passiveName: String
+  passiveDesc: String
+  location: String
+  ascensionMaterial: String
+}
+
+type Artifact {
+  name: String
+  maxRarity: Int
+  twoPieceBonus: String
+  fourPieceBonus: String
+}
+
 type Query {
   characters: [Character]
   character(name: String!): Character
   elements: [Element]
   element(name: String!): Element
+  weapons: [Weapon]
+  weapon(name: String!): Weapon
+  artifacts: [Artifact]
+  artifact(name: String!): Artifact
 }
