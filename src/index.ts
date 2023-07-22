@@ -1,8 +1,8 @@
-import { startStandaloneServer } from '@apollo/server/standalone'
-import { server } from './server.mjs';
+import { startServerAndCreateLambdaHandler, handlers } from '@as-integrations/aws-lambda'
+import { context, server } from './server'
 
-const { url } = await startStandaloneServer(server, {
-  listen: { port: 4000 },
-});
-
-console.log(`🚀  Server ready at: ${url}`);
+export const handler = startServerAndCreateLambdaHandler(
+  server,
+  handlers.createAPIGatewayProxyEventV2RequestHandler(),
+  { context }
+)

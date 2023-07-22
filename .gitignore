@@ -130,5 +130,6 @@ dist
 .pnp.*
 
 .DS_Store
-.build
-.vscode
+.build/
+.vscode/
+.webpack/

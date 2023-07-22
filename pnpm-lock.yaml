@@ -7,12 +7,12 @@ specifiers:
   '@types/node': ^20.4.2
   copyfiles: ^2.4.1
   graphql: ^16.7.1
+  graphql-tag: ^2.12.6
   nodemon: ^3.0.1
   rimraf: ^5.0.1
   serverless: ^3.33.0
   serverless-bundle: ^6.0.0
   serverless-offline: ^12.0.4
-  serverless-plugin-typescript: ^2.1.5
   serverless-webpack: ^5.11.0
   source-map-loader: ^4.0.1
   ts-loader: ^9.4.4
@@ -27,6 +27,7 @@ dependencies:
   '@apollo/server': 4.7.5_graphql@16.7.1
   '@as-integrations/aws-lambda': 2.0.1_@apollo+server@4.7.5
   graphql: 16.7.1
+  graphql-tag: 2.12.6_graphql@16.7.1
 
 devDependencies:
   '@tsconfig/node16': 16.1.0
@@ -37,7 +38,6 @@ devDependencies:
   serverless: 3.33.0
   serverless-bundle: 6.0.0_1147d4076ab46cd237eb4a7bdaf42917
   serverless-offline: 12.0.4_serverless@3.33.0
-  serverless-plugin-typescript: 2.1.5_fce4be59c25c592a529396292e23ccdc
   serverless-webpack: 5.11.0_9bc5507bbb894cf358518b2ab3a167d2
   source-map-loader: 4.0.1_webpack@5.88.2
   ts-loader: 9.4.4_typescript@5.1.6+webpack@5.88.2
@@ -3463,13 +3463,6 @@ packages:
       '@types/serve-static': 1.15.2
     dev: false
 
-  /@types/glob/7.2.0:
-    resolution: {integrity: sha512-ZUxbzKl0IfJILTS6t7ip5fQQM/J3TJYubDm3nMbgubNNYS62eXeUpoLUC8/7fJNiFYHTrGPQn7hspDUzIHX3UA==}
-    dependencies:
-      '@types/minimatch': 5.1.2
-      '@types/node': 20.4.2
-    dev: true
-
   /@types/graceful-fs/4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
     dependencies:
@@ -3529,10 +3522,6 @@ packages:
   /@types/mime/3.0.1:
     resolution: {integrity: sha512-Y4XFY5VJAuw0FgAqPNd6NNoV44jbq9Bz2L7Rh/J6jLTiHBSBJa9fxqQIvkIld4GsoDOcCbvzOUAbLPsSKKg+uA==}
     dev: false
-
-  /@types/minimatch/5.1.2:
-    resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
-    dev: true
 
   /@types/node-fetch/2.6.4:
     resolution: {integrity: sha512-1ZX9fcN4Rvkvgv4E6PAY5WXUFWFcRWxZa3EW83UjycOB9ljJCedb2CupIP4RZMEwF/M3eTcCihbBRgwtGbg5Rg==}
@@ -6416,15 +6405,6 @@ packages:
       universalify: 2.0.0
     dev: true
 
-  /fs-extra/7.0.1:
-    resolution: {integrity: sha512-YJDaCJZEnBmcbw13fvdAM9AwNOJwOzrE4pqMqBq5nFiEqXUqHwlK4B+3pUw6JNvfSPtX05xFHtYy/1ni01eGCw==}
-    engines: {node: '>=6 <7 || >=8'}
-    dependencies:
-      graceful-fs: 4.2.11
-      jsonfile: 4.0.0
-      universalify: 0.1.2
-    dev: true
-
   /fs-extra/9.1.0:
     resolution: {integrity: sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==}
     engines: {node: '>=10'}
@@ -6613,20 +6593,6 @@ packages:
       define-properties: 1.2.0
     dev: true
 
-  /globby/10.0.2:
-    resolution: {integrity: sha512-7dUi7RvCoT/xast/o/dLN53oqND4yk0nsHkhRgn9w65C4PofCLOoJ39iSOg+qVDdWQPIEj+eszMHQ+aLVwwQSg==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@types/glob': 7.2.0
-      array-union: 2.1.0
-      dir-glob: 3.0.1
-      fast-glob: 3.3.0
-      glob: 7.2.3
-      ignore: 5.2.4
-      merge2: 1.4.1
-      slash: 3.0.0
-    dev: true
-
   /globby/11.1.0:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
     engines: {node: '>=10'}
@@ -6681,6 +6647,16 @@ packages:
       graphql: 15.8.0
       tslib: 2.6.0
     dev: true
+
+  /graphql-tag/2.12.6_graphql@16.7.1:
+    resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      graphql: ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+    dependencies:
+      graphql: 16.7.1
+      tslib: 2.6.0
+    dev: false
 
   /graphql/15.8.0:
     resolution: {integrity: sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==}
@@ -8008,12 +7984,6 @@ packages:
     resolution: {integrity: sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==}
     engines: {node: '>=6'}
     hasBin: true
-    dev: true
-
-  /jsonfile/4.0.0:
-    resolution: {integrity: sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==}
-    optionalDependencies:
-      graceful-fs: 4.2.11
     dev: true
 
   /jsonfile/6.1.0:
@@ -9973,20 +9943,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /serverless-plugin-typescript/2.1.5_fce4be59c25c592a529396292e23ccdc:
-    resolution: {integrity: sha512-7OO6eJzv57dvfz0v9huU1JVBgdzgvvz+6GCwwkR2bfdVHKs1tifx+fSgjbQcBpXNNHf8Dx2Mo7evtYTkA/TDDA==}
-    engines: {node: '>=10.0'}
-    peerDependencies:
-      serverless: 2 || 3
-      typescript: '>=2.2.2'
-    dependencies:
-      fs-extra: 7.0.1
-      globby: 10.0.2
-      lodash: 4.17.21
-      serverless: 3.33.0
-      typescript: 5.1.6
-    dev: true
-
   /serverless-webpack/5.11.0_4067ad3e1f8db4167d7272a0695c533e:
     resolution: {integrity: sha512-0OjwSAMrf1OZZfbFwWUGuqz9eiMJIinTRWz2XNkKD3TY5EifvwU7oAF7mEXKPZTgtVhusSzz408C3FWgcIHizg==}
     engines: {node: '>= 10.12.0'}
@@ -11212,11 +11168,6 @@ packages:
     resolution: {integrity: sha512-AeLMQr8gcen2WOTwV0Gvi1nKKbY4Mms79MoltZ6hrZV/VANgE/YQly3jtWZJA/fa9m4ajhynq3XMqh5rOyZclA==}
     dependencies:
       moment: 2.29.4
-    dev: true
-
-  /universalify/0.1.2:
-    resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
-    engines: {node: '>= 4.0.0'}
     dev: true
 
   /universalify/0.2.0:
