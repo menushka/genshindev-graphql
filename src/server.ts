@@ -1,6 +1,6 @@
-import { readFileSync } from 'fs'
 import { ApolloServer } from '@apollo/server'
-import { ApolloServerPluginLandingPageLocalDefault, ApolloServerPluginLandingPageProductionDefault } from '@apollo/server/plugin/landingPage/default';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from '@apollo/server-plugin-landing-page-graphql-playground'
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 
 import { Api } from './api/api';
 import { CharacterModel } from './models/CharacterModel';
@@ -42,11 +42,7 @@ const server = new ApolloServer<Context>({
   typeDefs,
   resolvers,
   introspection: true,
-  plugins: [
-    process.env.NODE_ENV === 'production'
-      ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
-      : ApolloServerPluginLandingPageLocalDefault({ footer: false }),
-  ]
+  plugins: process.env.NODE_ENV === 'production' ? [ApolloServerPluginLandingPageGraphQLPlayground()] : [ApolloServerPluginLandingPageLocalDefault()],
 })
 
 export { context, server }
