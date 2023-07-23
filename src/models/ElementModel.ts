@@ -1,12 +1,12 @@
-import { Element, Reaction } from '../__generated__/resolvers-types';
+import { Element, ElementReaction } from '../__generated__/resolvers-types';
 import type { ApiType } from '../api/api';
 
-export interface ReactionRaw extends Omit<Reaction, 'elements'> {
+export interface ElementReactionRaw extends Omit<ElementReaction, 'elements'> {
   elements: string[]
 }
 
 export interface ElementRaw extends Omit<Element, 'reactions'> {
-  reactions: ReactionRaw[]
+  reactions: ElementReactionRaw[]
 }
 
 export class ElementModel {

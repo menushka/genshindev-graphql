@@ -1,19 +1,155 @@
+# Main Types
+
+type Artifact {
+  name: String
+  maxRarity: Int
+  twoPieceBonus: String
+  fourPieceBonus: String
+}
+
+type BossWeekly {
+  name: String
+  description: String
+  drops: [BossWeeklyDrop]
+  artifacts: [Artifact]
+}
+
 type Character {
   name: String
   title: String
   vision: Element
 }
 
+type ConsumableFood {
+  name: String
+  rarity: Int
+  type: String
+  effect: String
+  hasRecipe: Boolean
+  description: String
+  proficiency: Int
+  recipe: [ConsumableFoodRecipe]
+}
+
+type ConsumablePotion {
+  name: String
+  effect: String
+  rarity: Int
+  crafting: [ConsumablePotionCraft]
+}
+
+type Domain {
+  name: String
+  type: String
+  description: String
+  location: String
+  nation: Nation
+  requirements: [DomainRequirement]
+  recommendedElements: [Element]
+  rewards: [DomainReward]
+}
+
 type Element {
   name: String
   key: String
-  reactions: [Reaction]
+  reactions: [ElementReaction]
 }
 
-type Reaction {
+type Enemy {
+  id: String
   name: String
-  elements: [Element]
   description: String
+  region: String
+  type: String
+  family: String
+  faction: String
+  elements: [Element]
+  drops: [EnemyDrop]
+  artifacts: [Artifact]
+  elementalDescription: [EnemyDescription]
+  moraGained: Int
+}
+
+type MaterialBossMaterial {
+  name: String
+  source: String
+  characters: [Character]
+}
+
+type MaterialCharacterAscension {
+  id: String
+  name: String
+  sources: [String]
+  element: Element
+  rarity: Int
+}
+
+type MaterialCharacterExperience {
+  id: String
+  name: String
+  experience: Int
+  rarity: Int
+}
+
+type MaterialCommonAscension {
+  id: String
+  name: String
+  rarity: Int
+  characters: [Character]
+  enemy: [Enemy]
+}
+
+type MaterialCookingIngredients {
+  name: String
+  description: String
+  sources: [String]
+}
+
+type MaterialLocalSpecialties {
+  id: String
+  name: String
+  characters: [Character]
+  nation: Nation
+}
+
+type MaterialTalentBook {
+  id: String
+  name: String
+  rarity: Int
+  source: Domain
+  availability: [String]
+  characters: [Character]
+}
+
+type MaterialTalentBoss {
+  id: String
+  name: String
+  characters: [Character]
+}
+
+type MaterialWeaponAscension {
+  id: String
+  name: String
+  rarity: Int
+  source: Domain
+  availability: [String]
+  weapons: [Weapon]
+
+}
+
+type MaterialWeaponExperience {
+  id: String
+  name: String
+  experience: Int
+  rarity: Int
+  source: [String]
+}
+
+type Nation {
+  name: String
+  element: String
+  archon: String
+  controllingEntity: String
 }
 
 type Weapon {
@@ -28,20 +164,113 @@ type Weapon {
   ascensionMaterial: String
 }
 
-type Artifact {
+# Sub Types
+
+type BossWeeklyDrop {
   name: String
-  maxRarity: Int
-  twoPieceBonus: String
-  fourPieceBonus: String
+  rarity: Int
+  source: String
 }
 
-type Query {
-  characters: [Character]
-  character(name: String!): Character
+type ConsumableFoodRecipe {
+  item: String
+  quantity: Int
+}
+
+type ConsumablePotionCraft {
+  item: String
+  quantity: Int
+}
+
+type DomainRequirement {
+  level: Int
+  adventureRank: Int
+  recommendedLevel: Int
+  leyLineDisorder: [String]
+}
+
+type DomainReward {
+  day: String
+  details: [DomainRewardDetail]
+}
+
+type DomainRewardDetail {
+  level: Int
+  adventureExperience: Int
+  companionshipExperience: Int
+  mora: Int
+  drops: [DomainRewardDetailDrop]
+}
+
+type DomainRewardDetailDrop {
+  name: String
+  dropMin: Int
+  dropMax: Int
+}
+
+type EnemyDrop {
+  name: String
+  rarity: Int
+  minimumLevel: Int
+}
+
+type EnemyDescription {
+  element: Element
+  description: String
+}
+
+type ElementReaction {
+  name: String
   elements: [Element]
-  element(name: String!): Element
-  weapons: [Weapon]
-  weapon(name: String!): Weapon
+  description: String
+}
+
+# Union Types
+
+union Boss = BossWeekly
+union Consumable = ConsumableFood | ConsumablePotion
+union Material = MaterialBossMaterial
+  | MaterialCharacterAscension
+  | MaterialCharacterExperience
+  | MaterialCommonAscension
+  | MaterialCookingIngredients
+  | MaterialLocalSpecialties
+  | MaterialTalentBook
+  | MaterialTalentBoss
+  | MaterialWeaponAscension
+  | MaterialWeaponExperience
+
+# Query
+
+type Query {
   artifacts: [Artifact]
   artifact(name: String!): Artifact
+
+  bosses: [Boss]
+  boss(name: String!): Boss
+
+  characters: [Character]
+  character(name: String!): Character
+
+  consumables: [Consumable]
+  consumable(name: String!): Consumable
+
+  domains: [Domain]
+  domain(name: String!): Domain
+
+  elements: [Element]
+  element(name: String!): Element
+
+  enemies: [Enemy]
+  enemy(name: String!): Enemy
+
+  materials: [Material]
+  material(name: String!): Material
+
+  nations: [Nation]
+  nation(name: String!): Nation
+
+  weapons: [Weapon]
+  weapon(name: String!): Weapon
+  
 }
