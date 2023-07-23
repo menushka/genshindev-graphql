@@ -147,7 +147,7 @@ type MaterialWeaponExperience {
 
 type Nation {
   name: String
-  element: String
+  element: Element
   archon: String
   controllingEntity: String
 }

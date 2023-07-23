@@ -258,7 +258,7 @@ export type Nation = {
   __typename?: 'Nation';
   archon?: Maybe<Scalars['String']['output']>;
   controllingEntity?: Maybe<Scalars['String']['output']>;
-  element?: Maybe<Scalars['String']['output']>;
+  element?: Maybe<Element>;
   name?: Maybe<Scalars['String']['output']>;
 };
 
@@ -753,7 +753,7 @@ export type MaterialWeaponExperienceResolvers<ContextType = Context, ParentType 
 export type NationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Nation'] = ResolversParentTypes['Nation']> = ResolversObject<{
   archon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   controllingEntity?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  element?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  element?: Resolver<Maybe<ResolversTypes['Element']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

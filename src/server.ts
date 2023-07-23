@@ -10,11 +10,25 @@ import { Resolvers } from './__generated__/resolvers-types'
 import typeDefs from './schema.graphql'
 import { WeaponModel } from './models/WeaponModel';
 import { ArtifactModel } from './models/ArtifactModel';
+import { NationModel } from './models/NationModel';
+import { DomainModel } from './models/DomainModel';
+import { BossModel } from './models/BossModel';
 
 const resolvers: Resolvers = {
+  Boss: {
+    __resolveType: (obj, contextValue, info) => {
+      return 'BossWeekly'
+    }
+  },
   Query: {
+    artifacts: (parent, args, contextValue, info) => contextValue.artifactModel.getAll(),
+    artifact: (parent, { name }, contextValue, info) => contextValue.artifactModel.getByName(name),
+    bosses: (parent, args, contextValue, info) => contextValue.bossModel.getAll(),
+    boss: (parent, { name }, contextValue, info) => contextValue.bossModel.getByName(name),
     characters: (parent, args, contextValue, info) => contextValue.characterModel.getAll(),
     character: (parent, { name }, contextValue, info) => contextValue.characterModel.getByName(name),
+    domains: (parent, args, contextValue, info) => contextValue.domainModel.getAll(),
+    domain: (parent, { name }, contextValue, info) => contextValue.domainModel.getByName(name),
     elements: (parent, args, contextValue, info) => {
       const depth = Math.floor((getDepth(info.operation.selectionSet) - 2) / 2)
       return contextValue.elementModel.getAll(depth)
@@ -23,16 +37,25 @@ const resolvers: Resolvers = {
       const depth = Math.floor((getDepth(info.operation.selectionSet) - 2) / 2)
       return contextValue.elementModel.getByName(name, depth)
     },
+    nations: (parent, args, contextValue, info) => contextValue.nationModel.getAll(),
+    nation: (parent, { name }, contextValue, info) => contextValue.nationModel.getByName(name),
     weapons: (parent, args, contextValue, info) => contextValue.weaponModel.getAll(),
     weapon: (parent, { name }, contextValue, info) => contextValue.weaponModel.getByName(name),
-    artifacts: (parent, args, contextValue, info) => contextValue.artifactModel.getAll(),
-    artifact: (parent, { name }, contextValue, info) => contextValue.artifactModel.getByName(name),
   }
 }
 
 const context = async () => {
   const elementModel = new ElementModel(Api)
   await elementModel.refresh()
+
+  const bossModel = new BossModel(Api)
+  await bossModel.refresh()
+
+  const nationModel = new NationModel(Api, elementModel)
+  await nationModel.refresh()
+
+  const domainModel = new DomainModel(Api, elementModel, nationModel)
+  await domainModel.refresh()
 
   const characterModel = new CharacterModel(Api, elementModel)
   await characterModel.refresh()
@@ -44,10 +67,13 @@ const context = async () => {
   await artifactModel.refresh()
 
   return {
-    characterModel,
-    elementModel,
-    weaponModel,
     artifactModel,
+    bossModel,
+    characterModel,
+    domainModel,
+    elementModel,
+    nationModel,
+    weaponModel,
   }
 }
 export type Context = Awaited<ReturnType<typeof context>>
