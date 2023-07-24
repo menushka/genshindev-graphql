@@ -3,9 +3,6 @@ import type { ApiType } from '../api/api';
 
 export interface BossRaw extends Boss {}
 
-const zip = (a: unknown[], b: unknown[]) => a.map((k, i) => [k, b[i]])
-const encode = (str: string) => str.replace('-', '%2F')
-
 export class BossModel {
   private api: ApiType
 

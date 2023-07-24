@@ -197,10 +197,10 @@ export type MaterialCharacterExperience = {
 export type MaterialCommonAscension = {
   __typename?: 'MaterialCommonAscension';
   characters?: Maybe<Array<Maybe<Character>>>;
-  enemy?: Maybe<Array<Maybe<Enemy>>>;
   id?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   rarity?: Maybe<Scalars['Int']['output']>;
+  sources?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
 
 export type MaterialCookingIngredients = {
@@ -692,10 +692,10 @@ export type MaterialCharacterExperienceResolvers<ContextType = Context, ParentTy
 
 export type MaterialCommonAscensionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MaterialCommonAscension'] = ResolversParentTypes['MaterialCommonAscension']> = ResolversObject<{
   characters?: Resolver<Maybe<Array<Maybe<ResolversTypes['Character']>>>, ParentType, ContextType>;
-  enemy?: Resolver<Maybe<Array<Maybe<ResolversTypes['Enemy']>>>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   rarity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  sources?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

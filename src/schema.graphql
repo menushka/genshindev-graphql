@@ -96,7 +96,7 @@ type MaterialCommonAscension {
   name: String
   rarity: Int
   characters: [Character]
-  enemy: [Enemy]
+  sources: [String]
 }
 
 type MaterialCookingIngredients {
