@@ -4,6 +4,18 @@ provider:
   runtime: nodejs18.x
   httpApi:
     cors: true
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - "Fn::GetAtt": [cache, Arn]
 functions:
   graphql:
     handler: src/index.handler
@@ -14,6 +26,30 @@ functions:
       - httpApi:
           path: /
           method: GET
+resources:
+  Resources:
+    cache:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: cache
+        AttributeDefinitions:
+          - AttributeName: url
+            AttributeType: S
+        KeySchema:
+          - AttributeName: url
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 plugins:
   - serverless-webpack
+  - serverless-dynamodb
   - serverless-offline
+custom:
+  serverless-dynamodb:
+    stages:
+      - dev
+    port: 8000
+    docker: false
+    start:
+      migrate: true

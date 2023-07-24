@@ -7,7 +7,10 @@
     "start": "serverless offline start --reloadHandler",
     "package": "serverless package",
     "deploy": "serverless deploy",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "db:install": "serverless dynamodb install",
+    "db:start": "serverless dynamodb start",
+    "db:remove": "serverless dynamodb remove"
   },
   "author": "",
   "license": "ISC",
@@ -15,6 +18,8 @@
     "@apollo/server": "^4.7.5",
     "@apollo/server-plugin-landing-page-graphql-playground": "^4.0.1",
     "@as-integrations/aws-lambda": "^2.0.1",
+    "@aws-sdk/client-dynamodb": "^3.370.0",
+    "@aws-sdk/lib-dynamodb": "^3.370.0",
     "graphql": "^16.7.1",
     "graphql-tag": "^2.12.6"
   },
@@ -23,24 +28,15 @@
     "@graphql-codegen/introspection": "4.0.0",
     "@graphql-codegen/typescript": "4.0.1",
     "@graphql-codegen/typescript-resolvers": "4.0.1",
-    "@tsconfig/node16": "^16.1.0",
     "@types/node": "^20.4.2",
-    "copy-webpack-plugin": "^11.0.0",
-    "copyfiles": "^2.4.1",
-    "nodemon": "^3.0.1",
-    "rimraf": "^5.0.1",
     "serverless": "^3.33.0",
     "serverless-bundle": "^6.0.0",
+    "serverless-dynamodb": "^0.2.42",
     "serverless-offline": "^12.0.4",
     "serverless-webpack": "^5.11.0",
     "source-map-loader": "^4.0.1",
     "ts-loader": "^9.4.4",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.1.6",
-    "undici": "^5.22.1",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "webpack-node-externals": "^3.0.0"
+    "typescript": "^5.1.6"
   },
   "pnpm": {
     "peerDependencyRules": {

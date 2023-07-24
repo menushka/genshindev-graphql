@@ -1,3 +1,6 @@
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb'
+import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb"
+
 import type { CharacterRaw } from '../models/CharacterModel'
 import type { ElementRaw } from '../models/ElementModel'
 import type { WeaponRaw } from '../models/WeaponModel'
@@ -7,10 +10,31 @@ import type { DomainRaw } from '../models/DomainModel'
 import type { BossRaw } from '../models/BossModel'
 import type { ConsumableRaw } from '../models/ConsumableModel'
 import type { EnemyRaw } from '../models/EnemyModel'
-import { MaterialRaw } from '../models/MaterialModel'
+import type { MaterialRaw } from '../models/MaterialModel'
+
+const db = new DynamoDBClient(process.env.IS_OFFLINE ? {
+  region: 'localhost',
+  endpoint: 'http://localhost:8000',
+  credentials: {
+    accessKeyId: 'MockAccessKeyId',
+    secretAccessKey: 'MockSecretAccessKey'
+  },
+} : {})
+const TableName = 'cache'
 
 const base = 'https://api.genshin.dev'
-const apiFetch = (url: string) => fetch(`${base}${url}`).then(res => res.json())
+const apiFetch = async (url: string) => {
+  const getCommand = new GetCommand({ TableName, Key: { url } })
+  const cachedResponse = await db.send(getCommand)
+  if (cachedResponse?.Item?.response) {
+    return cachedResponse.Item.response
+  }
+
+  const response = await fetch(`${base}${url}`).then(res => res.json())
+  const putCommand = new PutCommand({ TableName, Item: { url, response } })
+  await db.send(putCommand)
+  return response
+}
 
 const resolverPerMaterialType = (type: string) => {
   switch (type) {
@@ -35,7 +59,7 @@ const resolverPerMaterialType = (type: string) => {
     case "weapon-experience":
       return (response: any) => response.items
   }
-} 
+}
 
 const Api = {
   Artifacts: {
