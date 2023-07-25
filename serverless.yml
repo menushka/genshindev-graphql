@@ -33,10 +33,10 @@ resources:
       Properties:
         TableName: cache
         AttributeDefinitions:
-          - AttributeName: url
+          - AttributeName: model
             AttributeType: S
         KeySchema:
-          - AttributeName: url
+          - AttributeName: model
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1

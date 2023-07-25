@@ -1,23 +1,39 @@
 import { Material } from '../__generated__/resolvers-types';
 import type { ApiType } from '../api/api';
+import { BaseModel } from './BaseModel';
 
 export type MaterialRaw = Material
 
-export class MaterialModel {
+interface CachedData {
+  materials: MaterialRaw[]
+}
+
+export class MaterialModel extends BaseModel<CachedData> {
   private api: ApiType
 
+  key = 'MaterialModel'
   materials: MaterialRaw[] = []
   materialsByName: { [name: string]: MaterialRaw } = {}
 
   constructor(api: ApiType) {
+    super()
     this.api = api
   }
 
-  async refresh() {
+  async fetch() {
     const materialTypes = await this.api.Materials.All()
     const materialsPerType = await Promise.all(materialTypes.map(this.api.Materials.AllForType))
-    this.materials = materialsPerType.flat()
-    this.materialsByName = Object.fromEntries(this.materials.map(material => [material.name, material]))
+    const materials = materialsPerType.flat()
+    return { materials }
+  }
+
+  async process(data: CachedData) {
+    this.materials = data.materials
+    this.materialsByName = Object.fromEntries(data.materials.map(artifact => [artifact.name, artifact]))
+  }
+
+  saveData() {
+    return { materials: this.materials }
   }
 
   getAll() {

@@ -15,6 +15,7 @@ import { BossModel } from './models/BossModel';
 import { MaterialModel } from './models/MaterialModel';
 import { EnemyModel } from './models/EnemyModel';
 import { ConsumableModel } from './models/ConsumableModel';
+import { BaseModel } from './models/BaseModel';
 
 const resolvers: Resolvers = {
   Boss: {
@@ -96,6 +97,12 @@ const resolvers: Resolvers = {
 }
 
 const context = async () => {
+  const modelsToSave: BaseModel<any>[] = []
+  const loadModelsAndQueueToSave = async (models: BaseModel<any>[]) => {
+    await Promise.all(models.map(model => model.load()))
+    modelsToSave.push(...models)
+  }
+
   const elementModel = new ElementModel(Api)
   const bossModel = new BossModel(Api)
   const materialModel = new MaterialModel(Api)
@@ -104,25 +111,29 @@ const context = async () => {
   const weaponModel = new WeaponModel(Api)
   const artifactModel = new ArtifactModel(Api)
 
-  await Promise.all([
-    elementModel.refresh(),
-    bossModel.refresh(),
-    materialModel.refresh(),
-    enemyModel.refresh(),
-    consumableModel.refresh(),
-    weaponModel.refresh(),
-    artifactModel.refresh(),
+  await loadModelsAndQueueToSave([
+    elementModel,
+    bossModel,
+    materialModel,
+    enemyModel,
+    consumableModel,
+    weaponModel,
+    artifactModel,
   ])
 
   const nationModel = new NationModel(Api, elementModel)
-  const domainModel = new DomainModel(Api, elementModel, nationModel)
   const characterModel = new CharacterModel(Api, elementModel)
-
-  await Promise.all([
-    nationModel.refresh(),
-    domainModel.refresh(),
-    characterModel.refresh(),
+  await loadModelsAndQueueToSave([
+    nationModel,
+    characterModel,
   ])
+
+  const domainModel = new DomainModel(Api, elementModel, nationModel)
+  await loadModelsAndQueueToSave([
+    domainModel
+  ])
+
+  await Promise.all(modelsToSave.map(model => model.save()))
 
   return {
     artifactModel,

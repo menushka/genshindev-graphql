@@ -1,5 +1,6 @@
 import { Artifact } from '../__generated__/resolvers-types';
 import type { ApiType } from '../api/api';
+import { BaseModel } from './BaseModel';
 
 export interface ArtifactRaw extends Pick<Artifact, 'name'> {
   max_rarity: number
@@ -7,20 +8,33 @@ export interface ArtifactRaw extends Pick<Artifact, 'name'> {
   '4-piece_bonus': string
 }
 
-export class ArtifactModel {
+interface CachedData { artifacts: ArtifactRaw[] }
+
+export class ArtifactModel extends BaseModel<CachedData> {
   private api: ApiType
 
+  key = 'ArtifactModel'
   artifacts: ArtifactRaw[] = []
   artifactsByName: { [name: string]: ArtifactRaw } = {}
 
   constructor(api: ApiType) {
+    super()
     this.api = api
   }
 
-  async refresh() {
+  async fetch() {
     const artifactNames = await this.api.Artifacts.All()
-    this.artifacts = await Promise.all(artifactNames.map(this.api.Artifacts.Specific))
-    this.artifactsByName = Object.fromEntries(this.artifacts.map(artifact => [artifact.name, artifact]))
+    const artifacts = await Promise.all(artifactNames.map(this.api.Artifacts.Specific))
+    return { artifacts }
+  }
+
+  async process(data: CachedData) {
+    this.artifacts = data.artifacts
+    this.artifactsByName = Object.fromEntries(data.artifacts.map(artifact => [artifact.name, artifact]))
+  }
+
+  saveData() {
+    return { artifacts: this.artifacts }
   }
 
   getAll() {

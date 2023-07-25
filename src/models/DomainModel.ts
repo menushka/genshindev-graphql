@@ -1,5 +1,6 @@
 import { Domain } from '../__generated__/resolvers-types';
 import type { ApiType } from '../api/api';
+import { BaseModel } from './BaseModel';
 import { ElementModel } from './ElementModel';
 import { NationModel } from './NationModel';
 
@@ -8,24 +9,39 @@ export interface DomainRaw extends Omit<Omit<Domain, 'recommendedElements'>, 'na
   nation: string
 }
 
-export class DomainModel {
+interface CachedData {
+  domains: DomainRaw[]
+}
+
+export class DomainModel extends BaseModel<CachedData> {
   private api: ApiType
   private elementModel: ElementModel
   private nationModel: NationModel
 
+  key = 'DomainModel'
   domains: DomainRaw[] = []
   domainsByName: { [name: string]: DomainRaw } = {}
 
   constructor(api: ApiType, elementModel: ElementModel, nationModel: NationModel) {
+    super()
     this.api = api
     this.elementModel = elementModel
     this.nationModel = nationModel
   }
 
-  async refresh() {
+  async fetch() {
     const nationNames = await this.api.Domains.All()
-    this.domains = await Promise.all(nationNames.map(this.api.Domains.Specific))
-    this.domainsByName = Object.fromEntries(this.domains.map(domain => [domain.name, domain]))
+    const domains = await Promise.all(nationNames.map(this.api.Domains.Specific))
+    return { domains }
+  }
+
+  async process(data: CachedData) {
+    this.domains = data.domains
+    this.domainsByName = Object.fromEntries(data.domains.map(artifact => [artifact.name, artifact]))
+  }
+
+  saveData() {
+    return { domains: this.domains }
   }
 
   getAll() {

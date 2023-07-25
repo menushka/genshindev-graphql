@@ -1,23 +1,39 @@
 import { Consumable } from '../__generated__/resolvers-types';
 import type { ApiType } from '../api/api';
+import { BaseModel } from './BaseModel';
 
 export type ConsumableRaw = Consumable
 
-export class ConsumableModel {
+interface CachedData {
+  consumables: ConsumableRaw[]
+}
+
+export class ConsumableModel extends BaseModel<CachedData> {
   private api: ApiType
 
+  key = 'ConsumableModel'
   consumables: ConsumableRaw[] = []
   consumablesByName: { [name: string]: ConsumableRaw } = {}
 
   constructor(api: ApiType) {
+    super()
     this.api = api
   }
 
-  async refresh() {
+  async fetch() {
     const consumableTypes = await this.api.Consumables.All()
     const consumablesPerType = await Promise.all(consumableTypes.map(this.api.Consumables.AllForType))
-    this.consumables = consumablesPerType.flat()
-    this.consumablesByName = Object.fromEntries(this.consumables.map(consumable => [consumable.name, consumable]))
+    const consumables = consumablesPerType.flat()
+    return { consumables }
+  }
+
+  async process(data: CachedData) {
+    this.consumables = data.consumables
+    this.consumablesByName = Object.fromEntries(data.consumables.map(artifact => [artifact.name, artifact]))
+  }
+
+  saveData() {
+    return { consumables: this.consumables }
   }
 
   getAll() {

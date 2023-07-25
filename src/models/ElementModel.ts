@@ -1,5 +1,6 @@
 import { Element, ElementReaction } from '../__generated__/resolvers-types';
 import type { ApiType } from '../api/api';
+import { BaseModel } from './BaseModel';
 
 export interface ElementReactionRaw extends Omit<ElementReaction, 'elements'> {
   elements: string[]
@@ -9,20 +10,35 @@ export interface ElementRaw extends Omit<Element, 'reactions'> {
   reactions: ElementReactionRaw[]
 }
 
-export class ElementModel {
+interface CachedData {
+  elements: ElementRaw[]
+}
+
+export class ElementModel extends BaseModel<CachedData> {
   private api: ApiType
 
+  key = 'ElementModel'
   elements: ElementRaw[] = []
   elementsByName: { [name: string]: ElementRaw } = {}
 
   constructor(api: ApiType) {
+    super()
     this.api = api
   }
 
-  async refresh() {
+  async fetch() {
     const elementNames = await this.api.Elements.All()
-    this.elements = await Promise.all(elementNames.map(this.api.Elements.Specific))
-    this.elementsByName = Object.fromEntries(this.elements.map(element => [element.name, element]))
+    const elements = await Promise.all(elementNames.map(this.api.Elements.Specific))
+    return { elements }
+  }
+
+  async process(data: CachedData) {
+    this.elements = data.elements
+    this.elementsByName = Object.fromEntries(data.elements.map(artifact => [artifact.name, artifact]))
+  }
+
+  saveData() {
+    return { elements: this.elements }
   }
 
   getAll(depth = 1) {
