@@ -8,7 +8,6 @@ import type { BossRaw } from '../models/BossModel'
 import type { ConsumableRaw } from '../models/ConsumableModel'
 import type { EnemyRaw } from '../models/EnemyModel'
 import type { MaterialRaw } from '../models/MaterialModel'
-import { db, TableName } from '../db/db'
 
 const base = 'https://api.genshin.dev'
 const apiFetch = async (url: string) => fetch(`${base}${url}`).then(res => res.json())
